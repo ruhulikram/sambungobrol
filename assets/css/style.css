@@ -1,0 +1,471 @@
+/* ============================================================
+   NGOBROL ABJAD — Premium Visual Redesign & Kustomisasi
+   ============================================================ 
+   Silakan ubah variabel CSS di bawah ini untuk mengganti warna, 
+   ukuran, radius, border, dan font sesuai selera Anda sendiri!
+   ============================================================ */
+
+:root {
+  /* --- Warna Utama / Theme Colors --- */
+  --primary: #6366f1;         /* Warna ungu kebiruan utama */
+  --primary-dark: #4f46e5;    /* Warna ungu lebih gelap untuk hover/active */
+  --secondary: #a855f7;       /* Warna ungu sekunder */
+  --accent: #ec4899;          /* Warna pink aksen */
+  --success: #10b981;         /* Warna hijau saat game selesai */
+  
+  /* --- Latar Belakang & Teks --- */
+  --bg: #f3f4f6;              /* Warna background halaman luar */
+  --card-bg: #ffffff;         /* Warna background card game */
+  --text-main: #1f2937;       /* Warna teks utama */
+  --text-muted: #6b7280;      /* Warna teks keterangan / abu-abu */
+  --border: #f3f4f6;          /* Warna border */
+
+  /* --- Ukuran & Spacing (Customizable) --- */
+  --card-max-width: 400px;    /* Lebar maksimal game card */
+  --radius-card: 28px;        /* Kebulatan sudut card game */
+  --radius-btn: 16px;         /* Kebulatan sudut tombol-tombol */
+  --radius-logo: 24px;        /* Kebulatan sudut logo */
+
+  /* --- Font --- */
+  --font-family: 'Poppins', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg);
+  /* Pola grid latar belakang */
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 40%),
+    radial-gradient(#d1d5db 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 20px 20px;
+  min-height: 100dvh;
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: env(safe-area-inset-top, 16px) env(safe-area-inset-right, 16px) env(safe-area-inset-bottom, 16px) env(safe-area-inset-left, 16px);
+  color: var(--text-main);
+}
+
+/* --- Floating background bubbles --- */
+.bubble {
+  position: fixed;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.05);
+  animation: floatBubble linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+.bubble:nth-child(1) { width: 80px; height: 80px; left: 10%; animation-duration: 10s; }
+.bubble:nth-child(2) { width: 50px; height: 50px; left: 25%; animation-duration: 14s; animation-delay: 2s; }
+.bubble:nth-child(3) { width: 100px; height: 100px; left: 70%; animation-duration: 12s; animation-delay: 1s; }
+.bubble:nth-child(4) { width: 40px; height: 40px; left: 85%; animation-duration: 8s; animation-delay: 3s; }
+.bubble:nth-child(5) { width: 60px; height: 60px; left: 45%; animation-duration: 16s; }
+
+@keyframes floatBubble {
+  0%   { transform: translateY(110vh) scale(1); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.5; }
+  100% { transform: translateY(-10vh) scale(1.1); opacity: 0; }
+}
+
+/* --- Main Card --- */
+#game-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--card-max-width);
+  background: var(--card-bg);
+  border-radius: var(--radius-card);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(99, 102, 241, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  padding: clamp(24px, 6vw, 36px) clamp(20px, 5vw, 28px);
+  transition: transform 0.1s ease;
+}
+
+/* --- Screen setups --- */
+.screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+}
+.screen.active {
+  display: flex;
+}
+
+/* ==========================================
+   SCREEN 1: START
+   ========================================== */
+.logo-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.logo-bg {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-logo);
+  background: linear-gradient(135deg, #f0f3ff, #fbf7ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.08);
+  overflow: hidden;
+  padding: 14px;
+}
+.logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.logo-badge {
+  position: absolute;
+  bottom: -6px;
+  right: -6px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: white;
+}
+
+.game-title {
+  text-align: center;
+}
+.game-title h1 {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.1;
+}
+.game-title .highlight {
+  font-size: 42px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+  margin-top: 4px;
+}
+
+.game-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.6;
+  max-width: 300px;
+}
+
+.features-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.feature-item {
+  background: #f3f4f6;
+  border-radius: 99px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4b5563;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ==========================================
+   SCREEN 2: GAMEPLAY
+   ========================================== */
+.game-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
+}
+
+.btn-home {
+  background: #f3f4f6;
+  border: none;
+  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #4b5563;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  padding: 10px;
+}
+.btn-home:hover {
+  background: #e5e7eb;
+  color: #111827;
+  transform: translateY(-1px);
+}
+.btn-home:active {
+  transform: scale(0.95);
+}
+.icon-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.progress-wrap {
+  flex: 1;
+}
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 99px;
+  overflow: hidden;
+}
+#progress-bar {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.progress-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: #9ca3af;
+  flex-shrink: 0;
+  min-width: 42px;
+  text-align: right;
+}
+
+/* Area Huruf Display (Aman dari terpotong) */
+.letter-display-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.glow-ring {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+  animation: glowRing 3s ease-in-out infinite;
+}
+@keyframes glowRing {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.letter-box {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+#current-letter {
+  font-size: clamp(110px, 32vw, 156px);
+  font-weight: 900;
+  line-height: 1.1;
+  background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  overflow: visible;
+  filter: drop-shadow(0 8px 24px rgba(99, 102, 241, 0.15));
+  letter-spacing: -2px;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+#current-letter.changing {
+  opacity: 0;
+  transform: scale(0.7) rotate(-5deg);
+}
+
+.prompt-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f3f4f6;
+  border-radius: 99px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 4px;
+}
+
+/* ==========================================
+   SCREEN 3: FINISH
+   ========================================== */
+.end-emoji {
+  font-size: 72px;
+  animation: bounceEmoji 1s infinite alternate;
+}
+@keyframes bounceEmoji {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-8px); }
+}
+.end-title {
+  font-size: 32px;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.end-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.6;
+  max-width: 280px;
+}
+.confetti-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: 28px;
+}
+
+/* Confetti particles keyframe animation */
+.confetti-piece {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  top: -10px;
+  animation: confettiFall 2.5s ease-in forwards;
+}
+@keyframes confettiFall {
+  0% { top: -10px; opacity: 1; }
+  100% { top: 110%; opacity: 0; transform: rotate(720deg) translateX(30px); }
+}
+
+/* ==========================================
+   BUTTONS & ACTIONS
+   ========================================== */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  border: none;
+  border-radius: var(--radius-btn);
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+.btn:active {
+  transform: scale(0.96) translateY(0);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 16px 24px;
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+}
+
+.btn-next {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 18px 24px;
+  font-size: 18px;
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+}
+
+.btn-next.btn-finish {
+  background: linear-gradient(135deg, var(--success), #34d399);
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
+}
+
+.keyboard-hint {
+  font-size: 11px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+.keyboard-hint kbd {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-bottom: 2px solid #b5bac1;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* Sembunyikan panduan keyboard di HP */
+@media (max-width: 480px) {
+  #game-container {
+    border-radius: 24px;
+    margin: 0 8px;
+  }
+  .keyboard-hint {
+    display: none;
+  }
+}
+
+/* Pengoptimalan mode lanskap HP */
+@media (max-height: 540px) and (orientation: landscape) {
+  body {
+    align-items: flex-start;
+    padding: 12px;
+    overflow-y: auto;
+  }
+  #game-container {
+    max-width: 100%;
+    padding: 20px;
+  }
+  .screen {
+    gap: 14px;
+  }
+  .letter-display-container {
+    height: 120px;
+  }
+  #current-letter {
+    font-size: 80px;
+  }
+}

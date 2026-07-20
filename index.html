@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Game ngobrol sambung kalimat sesuai abjad A-Z. Seru dimainkan bareng teman!">
+  <meta name="theme-color" content="#6366f1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <title>Ngobrol Abjad 🗣️ A–Z</title>
+
+  <!-- Favicon (Bisa kamu ganti dengan file favicon.ico atau png milikmu) -->
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+  <!-- Dekorasi latar belakang (bisa dinonaktifkan/dihapus di style.css) -->
+  <div class="bubble" aria-hidden="true"></div>
+  <div class="bubble" aria-hidden="true"></div>
+  <div class="bubble" aria-hidden="true"></div>
+  <div class="bubble" aria-hidden="true"></div>
+  <div class="bubble" aria-hidden="true"></div>
+
+  <!-- Main Game Container -->
+  <div id="game-container" role="main" aria-label="Game Ngobrol Abjad">
+
+    <!-- ======================== SCREEN 1: START ======================== -->
+    <div id="start-screen" class="screen active" aria-label="Layar Mulai">
+      
+      <!-- Logo Proyek (Ganti file assets/images/logo.svg untuk kustomisasi logo) -->
+      <div class="logo-wrapper">
+        <div class="logo-bg">
+          <img src="assets/images/logo.svg" alt="Logo Ngobrol Abjad" class="logo-img">
+        </div>
+        <div class="logo-badge">⚡</div>
+      </div>
+
+      <!-- Game Title -->
+      <div class="game-title">
+        <h1>Ngobrol</h1>
+        <span class="highlight">A – Z</span>
+      </div>
+
+      <!-- Description -->
+      <p class="game-desc">
+        Game ngobrol sambung kalimat! Tiap giliran harus ngomong pake kata yang berawalan huruf abjad berikutnya.
+      </p>
+
+      <!-- Fitur/Langkah permainan -->
+      <div class="features-list">
+        <div class="feature-item"><span>💬</span> Ngobrol seru</div>
+        <div class="feature-item"><span>🔤</span> Sesuai abjad</div>
+        <div class="feature-item"><span>🏆</span> Sampai huruf Z</div>
+      </div>
+
+      <!-- Start Button -->
+      <button id="btn-start" class="btn btn-primary">
+        <span>Mulai Main! 🚀</span>
+      </button>
+
+    </div>
+
+    <!-- ======================== SCREEN 2: GAMEPLAY ======================== -->
+    <div id="game-screen" class="screen" aria-label="Layar Gameplay">
+      
+      <!-- Top Header (Home & Progress) -->
+      <div class="game-header">
+        <!-- Tombol Home (Ganti assets/images/home.svg untuk kustomisasi ikon) -->
+        <button id="btn-home" class="btn-home" title="Kembali ke Menu Utama" aria-label="Menu Utama">
+          <img src="assets/images/home.svg" alt="Home" class="icon-img">
+        </button>
+        <div class="progress-wrap">
+          <div class="progress-track" role="progressbar" aria-valuemin="1" aria-valuemax="26" aria-valuenow="1">
+            <div id="progress-bar"></div>
+          </div>
+        </div>
+        <span id="progress-text" class="progress-text">1/26</span>
+      </div>
+
+      <!-- Target Letter Display -->
+      <div class="letter-display-container">
+        <div class="glow-ring"></div>
+        <div class="letter-box">
+          <span id="current-letter">A</span>
+        </div>
+      </div>
+
+      <!-- Prompt Banner -->
+      <div class="prompt-banner">
+        <span>👉</span> Siapa giliran huruf ini?
+      </div>
+
+      <!-- Action Button -->
+      <button id="btn-next" class="btn btn-next">
+        <span>SELANJUTNYA</span>
+        <!-- Panah inline SVG sederhana -->
+        <svg class="btn-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+        </svg>
+      </button>
+
+      <!-- Keyboard Info -->
+      <div class="keyboard-hint">
+        Tekan <kbd>Space</kbd> atau <kbd>→</kbd> untuk lanjut
+      </div>
+
+    </div>
+
+    <!-- ======================== SCREEN 3: FINISH ======================== -->
+    <div id="end-screen" class="screen" aria-label="Layar Selesai">
+      
+      <!-- CSS Confetti container -->
+      <div class="confetti-container" aria-hidden="true"></div>
+
+      <div class="end-emoji">🎉</div>
+      <h2 class="end-title">SELESAI!</h2>
+      <p class="end-desc">
+        Mantap! Kalian berhasil menyelesaikan tantangan ngobrol berurutan dari <strong>A</strong> sampai <strong>Z</strong>!
+      </p>
+
+      <button id="btn-restart" class="btn btn-primary">
+        <span>Main Lagi 🔄</span>
+      </button>
+
+    </div>
+
+  </div>
+
+  <script src="assets/js/game.js"></script>
+</body>
+
+</html>
