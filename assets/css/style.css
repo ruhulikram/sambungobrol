@@ -1,33 +1,36 @@
-/* ============================================================
-   NGOBROL ABJAD — Premium Visual Redesign & Kustomisasi
-   ============================================================ 
-   Silakan ubah variabel CSS di bawah ini untuk mengganti warna, 
-   ukuran, radius, border, dan font sesuai selera Anda sendiri!
-   ============================================================ */
-
 :root {
-  /* --- Warna Utama / Theme Colors --- */
-  --primary: #6366f1;         /* Warna ungu kebiruan utama */
-  --primary-dark: #4f46e5;    /* Warna ungu lebih gelap untuk hover/active */
-  --secondary: #a855f7;       /* Warna ungu sekunder */
-  --accent: #ec4899;          /* Warna pink aksen */
-  --success: #10b981;         /* Warna hijau saat game selesai */
-  
-  /* --- Latar Belakang & Teks --- */
-  --bg: #f3f4f6;              /* Warna background halaman luar */
-  --card-bg: #ffffff;         /* Warna background card game */
-  --text-main: #1f2937;       /* Warna teks utama */
-  --text-muted: #6b7280;      /* Warna teks keterangan / abu-abu */
-  --border: #f3f4f6;          /* Warna border */
+  /* Ubah warna utama game di sini. */
+  --paper: #f2eddf;
+  --surface: #fffaf0;
+  --ink: #171713;
+  --muted: #6e6a5e;
+  --accent: #ff5c35;
+  --accent-pressed: #df4525;
+  --line: #171713;
+  --danger: #c83b2d;
 
-  /* --- Ukuran & Spacing (Customizable) --- */
-  --card-max-width: 400px;    /* Lebar maksimal game card */
-  --radius-card: 28px;        /* Kebulatan sudut card game */
-  --radius-btn: 16px;         /* Kebulatan sudut tombol-tombol */
-  --radius-logo: 24px;        /* Kebulatan sudut logo */
+  /* Ubah bentuk dan ukuran utama di sini. */
+  --card-width: 420px;
+  --radius-card: 18px;
+  --radius-button: 12px;
+  --font-family: Arial, Helvetica, sans-serif;
 
-  /* --- Font --- */
-  --font-family: 'Poppins', sans-serif;
+  /* Ukuran setiap elemen utama. */
+  --logo-slot-width: 104px;
+  --logo-slot-height: 72px;
+  --title-size: clamp(56px, 17vw, 76px);
+  --body-size: 16px;
+  --navbar-mark-size: 44px;
+  --letter-area-height: 300px;
+  --letter-size: clamp(150px, 48vw, 220px);
+  --button-height: 58px;
+  --end-slot-height: 210px;
+
+  /* Area kosong / jarak antarelemen. */
+  --screen-gap: 24px;
+  --start-copy-gap: 22px;
+  --game-gap: 17px;
+  --content-padding: clamp(20px, 5vw, 28px);
 }
 
 * {
@@ -36,436 +39,473 @@
   padding: 0;
 }
 
+html {
+  background: var(--paper);
+}
+
 body {
-  font-family: var(--font-family);
-  background-color: var(--bg);
-  /* Pola grid latar belakang */
-  background-image:
-    radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.06) 0%, transparent 40%),
-    radial-gradient(#d1d5db 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 20px 20px;
   min-height: 100dvh;
-  height: 100dvh;
-  width: 100vw;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: env(safe-area-inset-top, 16px) env(safe-area-inset-right, 16px) env(safe-area-inset-bottom, 16px) env(safe-area-inset-left, 16px);
-  color: var(--text-main);
+  width: 100%;
+  display: grid;
+  place-items: center;
+  overflow-x: hidden;
+  padding:
+    max(12px, env(safe-area-inset-top))
+    max(12px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom))
+    max(12px, env(safe-area-inset-left));
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* --- Floating background bubbles --- */
-.bubble {
-  position: fixed;
-  border-radius: 50%;
-  background: rgba(99, 102, 241, 0.05);
-  animation: floatBubble linear infinite;
-  pointer-events: none;
-  z-index: 0;
-}
-.bubble:nth-child(1) { width: 80px; height: 80px; left: 10%; animation-duration: 10s; }
-.bubble:nth-child(2) { width: 50px; height: 50px; left: 25%; animation-duration: 14s; animation-delay: 2s; }
-.bubble:nth-child(3) { width: 100px; height: 100px; left: 70%; animation-duration: 12s; animation-delay: 1s; }
-.bubble:nth-child(4) { width: 40px; height: 40px; left: 85%; animation-duration: 8s; animation-delay: 3s; }
-.bubble:nth-child(5) { width: 60px; height: 60px; left: 45%; animation-duration: 16s; }
-
-@keyframes floatBubble {
-  0%   { transform: translateY(110vh) scale(1); opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 0.5; }
-  100% { transform: translateY(-10vh) scale(1.1); opacity: 0; }
+button {
+  font: inherit;
 }
 
-/* --- Main Card --- */
+button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
 #game-container {
   position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: var(--card-max-width);
-  background: var(--card-bg);
-  border-radius: var(--radius-card);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(99, 102, 241, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  width: min(100%, var(--card-width));
+  min-height: min(680px, calc(100dvh - 24px));
   overflow: hidden;
-  padding: clamp(24px, 6vw, 36px) clamp(20px, 5vw, 28px);
-  transition: transform 0.1s ease;
+  padding: var(--content-padding);
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-card);
+  box-shadow: 6px 6px 0 var(--line);
 }
 
-/* --- Screen setups --- */
 .screen {
   display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
   width: 100%;
-}
-.screen.active {
-  display: flex;
+  min-height: calc(min(680px, calc(100dvh - 24px)) - (var(--content-padding) * 2));
+  opacity: 0;
 }
 
-/* ==========================================
-   SCREEN 1: START
-   ========================================== */
-.logo-wrapper {
-  position: relative;
+.screen.active {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 8px;
+  animation: screen-in 220ms cubic-bezier(.2, .75, .25, 1) both;
 }
-.logo-bg {
-  width: 80px;
-  height: 80px;
-  border-radius: var(--radius-logo);
-  background: linear-gradient(135deg, #f0f3ff, #fbf7ff);
+
+.screen.leaving {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.08);
-  overflow: hidden;
-  padding: 14px;
+  animation: screen-out 180ms ease-in both;
+  pointer-events: none;
 }
-.logo-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+
+@keyframes screen-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-.logo-badge {
-  position: absolute;
-  bottom: -6px;
-  right: -6px;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 3px solid #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  color: white;
+
+@keyframes screen-out {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+/* Layar pembuka */
+#start-screen {
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--screen-gap);
+}
+
+/* Slot kosong untuk logo buatanmu. */
+.custom-logo-slot {
+  display: grid;
+  width: var(--logo-slot-width);
+  height: var(--logo-slot-height);
+  place-items: center;
+  border: 2px dashed var(--muted);
+  border-radius: 10px;
+  color: var(--muted);
+}
+
+.custom-logo-slot > span,
+.custom-end-slot > span {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .12em;
+}
+
+.start-copy {
+  display: grid;
+  gap: var(--start-copy-gap);
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .13em;
+  line-height: 1.4;
 }
 
 .game-title {
-  text-align: center;
+  position: relative;
+  width: fit-content;
 }
+
 .game-title h1 {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--text-main);
-  line-height: 1.1;
-}
-.game-title .highlight {
-  font-size: 42px;
+  font-size: var(--title-size);
   font-weight: 900;
-  background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: block;
-  margin-top: 4px;
+  letter-spacing: -.075em;
+  line-height: .78;
+}
+
+.title-range {
+  position: absolute;
+  right: -44px;
+  bottom: -18px;
+  padding: 7px 9px 5px;
+  background: var(--accent);
+  border: 2px solid var(--line);
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: -.04em;
+  transform: rotate(-4deg);
 }
 
 .game-desc {
+  max-width: 330px;
+  color: var(--muted);
+  font-size: var(--body-size);
+  line-height: 1.5;
+}
+
+.rule-card {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  gap: 14px;
+  align-items: start;
+  padding: 16px;
+  background: transparent;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+}
+
+.rule-number {
+  padding-top: 2px;
+  color: var(--accent-pressed);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.rule-card p {
   font-size: 14px;
-  color: var(--text-muted);
-  text-align: center;
-  line-height: 1.6;
-  max-width: 300px;
+  font-weight: 700;
+  line-height: 1.45;
 }
 
-.features-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 8px;
-}
-.feature-item {
-  background: #f3f4f6;
-  border-radius: 99px;
-  padding: 6px 14px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #4b5563;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+/* Tombol */
+.btn {
+  width: 100%;
+  min-height: var(--button-height);
+  padding: 14px 18px;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-button);
+  cursor: pointer;
+  font-weight: 800;
+  transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* ==========================================
-   SCREEN 2: GAMEPLAY
-   ========================================== */
+.btn-primary,
+.btn-next {
+  background: var(--ink);
+  box-shadow: 0 4px 0 var(--accent);
+  color: var(--surface);
+}
+
+.btn-primary:active,
+.btn-next:active {
+  box-shadow: 0 1px 0 var(--accent);
+  transform: translateY(3px);
+}
+
+.btn-next.is-finish {
+  background: var(--accent);
+  box-shadow: 0 4px 0 var(--ink);
+  color: var(--ink);
+}
+
+.btn-secondary {
+  background: var(--surface);
+  box-shadow: 0 3px 0 var(--line);
+  color: var(--ink);
+}
+
+.btn-danger {
+  background: var(--danger);
+  box-shadow: 0 3px 0 var(--line);
+  color: #fff;
+}
+
+/* Layar permainan */
+#game-screen {
+  flex-direction: column;
+  gap: var(--game-gap);
+}
+
 .game-header {
   display: flex;
   align-items: center;
-  width: 100%;
-  gap: 12px;
+  justify-content: space-between;
+  gap: 16px;
 }
 
-.btn-home {
-  background: #f3f4f6;
-  border: none;
-  border-radius: 12px;
-  width: 40px;
-  height: 40px;
+.btn-navbar {
   display: flex;
+  min-width: 48px;
+  min-height: 48px;
   align-items: center;
-  justify-content: center;
+  gap: 9px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: var(--ink);
   cursor: pointer;
-  color: #4b5563;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-  padding: 10px;
-}
-.btn-home:hover {
-  background: #e5e7eb;
-  color: #111827;
-  transform: translateY(-1px);
-}
-.btn-home:active {
-  transform: scale(0.95);
-}
-.icon-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  font-size: 14px;
+  font-weight: 800;
 }
 
-.progress-wrap {
-  flex: 1;
-}
-.progress-track {
-  width: 100%;
-  height: 8px;
-  background: #e5e7eb;
-  border-radius: 99px;
-  overflow: hidden;
-}
-#progress-bar {
-  height: 100%;
-  border-radius: 99px;
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
-  transition: width 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+.custom-navbar-mark {
+  display: grid;
+  width: var(--navbar-mark-size);
+  height: var(--navbar-mark-size);
+  place-items: center;
+  border: 2px dashed var(--muted);
+  border-radius: 9px;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
 }
 
 .progress-text {
+  color: var(--muted);
   font-size: 13px;
   font-weight: 700;
-  color: #9ca3af;
-  flex-shrink: 0;
-  min-width: 42px;
-  text-align: right;
 }
 
-/* Area Huruf Display (Aman dari terpotong) */
-.letter-display-container {
-  position: relative;
+.progress-track {
   width: 100%;
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: visible;
+  height: 8px;
+  overflow: hidden;
+  background: transparent;
+  border: 2px solid var(--line);
+  border-radius: 99px;
 }
 
-.glow-ring {
-  position: absolute;
-  width: 160px;
-  height: 160px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
-  animation: glowRing 3s ease-in-out infinite;
-}
-@keyframes glowRing {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-}
-
-.letter-box {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+#progress-bar {
+  width: calc(100% / 26);
   height: 100%;
-  overflow: visible;
+  background: var(--accent);
+  transition: width 280ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.letter-display-container {
+  display: grid;
+  flex: 1;
+  min-height: var(--letter-area-height);
+  place-items: center;
+  overflow: hidden;
+  background: var(--accent);
+  border: 2px solid var(--line);
+  border-radius: 18px;
 }
 
 #current-letter {
-  font-size: clamp(110px, 32vw, 156px);
+  color: var(--ink);
+  font-size: var(--letter-size);
   font-weight: 900;
-  line-height: 1.1;
-  background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
-  overflow: visible;
-  filter: drop-shadow(0 8px 24px rgba(99, 102, 241, 0.15));
-  letter-spacing: -2px;
-  transition: opacity 0.15s ease, transform 0.15s ease;
-}
-#current-letter.changing {
-  opacity: 0;
-  transform: scale(0.7) rotate(-5deg);
+  letter-spacing: -.08em;
+  line-height: .8;
+  will-change: transform, opacity;
 }
 
-.prompt-banner {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #f3f4f6;
-  border-radius: 99px;
-  padding: 8px 18px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #4b5563;
-  margin-bottom: 4px;
+#current-letter.letter-out {
+  animation: letter-out 120ms ease-in both;
 }
 
-/* ==========================================
-   SCREEN 3: FINISH
-   ========================================== */
-.end-emoji {
-  font-size: 72px;
-  animation: bounceEmoji 1s infinite alternate;
-}
-@keyframes bounceEmoji {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-8px); }
-}
-.end-title {
-  font-size: 32px;
-  font-weight: 900;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.end-desc {
-  font-size: 14px;
-  color: var(--text-muted);
-  text-align: center;
-  line-height: 1.6;
-  max-width: 280px;
-}
-.confetti-container {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  border-radius: 28px;
+#current-letter.letter-in {
+  animation: letter-in 240ms cubic-bezier(.2, .8, .2, 1) both;
 }
 
-/* Confetti particles keyframe animation */
-.confetti-piece {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: 2px;
-  top: -10px;
-  animation: confettiFall 2.5s ease-in forwards;
-}
-@keyframes confettiFall {
-  0% { top: -10px; opacity: 1; }
-  100% { top: 110%; opacity: 0; transform: rotate(720deg) translateX(30px); }
+@keyframes letter-out {
+  to { opacity: 0; transform: translateX(-28px); }
 }
 
-/* ==========================================
-   BUTTONS & ACTIONS
-   ========================================== */
-.btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  border: none;
-  border-radius: var(--radius-btn);
-  font-family: var(--font-family);
-  font-weight: 700;
+@keyframes letter-in {
+  from { opacity: 0; transform: translateX(28px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.turn-prompt {
+  align-self: flex-start;
   font-size: 16px;
-  cursor: pointer;
-  transition: transform 0.15s ease, opacity 0.15s ease;
-  -webkit-tap-highlight-color: transparent;
-}
-.btn:hover {
-  transform: translateY(-2px);
-  opacity: 0.95;
-}
-.btn:active {
-  transform: scale(0.96) translateY(0);
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: white;
-  padding: 16px 24px;
-  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
-}
-
-.btn-next {
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  color: white;
-  padding: 18px 24px;
-  font-size: 18px;
-  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
-}
-
-.btn-next.btn-finish {
-  background: linear-gradient(135deg, var(--success), #34d399);
-  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
-}
-
-.keyboard-hint {
-  font-size: 11px;
-  color: #9ca3af;
-  font-weight: 500;
-}
-.keyboard-hint kbd {
-  background: #f3f4f6;
-  border: 1px solid #d1d5db;
-  border-bottom: 2px solid #b5bac1;
-  border-radius: 4px;
-  padding: 1px 6px;
-  font-size: 10px;
   font-weight: 700;
+  line-height: 1.4;
 }
 
-/* Sembunyikan panduan keyboard di HP */
-@media (max-width: 480px) {
+/* Layar selesai */
+#end-screen {
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 28px;
+}
+
+/* Slot kosong untuk end mark buatanmu. */
+.custom-end-slot {
+  display: grid;
+  width: 100%;
+  min-height: var(--end-slot-height);
+  place-items: center;
+  overflow: hidden;
+  background: transparent;
+  border: 2px dashed var(--muted);
+  border-radius: 18px;
+  color: var(--muted);
+}
+
+.end-copy {
+  display: grid;
+  gap: 14px;
+}
+
+.end-copy h2 {
+  font-size: clamp(44px, 13vw, 58px);
+  font-weight: 900;
+  letter-spacing: -.065em;
+  line-height: .9;
+}
+
+.end-copy > p:last-child {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Dialog keluar */
+.dialog-backdrop {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  display: grid;
+  place-items: end center;
+  padding:
+    16px
+    max(16px, env(safe-area-inset-right))
+    max(16px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+  background: rgb(23 23 19 / 55%);
+}
+
+.dialog-backdrop[hidden] {
+  display: none;
+}
+
+.dialog {
+  width: min(100%, 420px);
+  padding: 22px;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 5px 5px 0 var(--line);
+  animation: dialog-in 220ms cubic-bezier(.2, .8, .2, 1) both;
+}
+
+@keyframes dialog-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dialog h2 {
+  margin-top: 10px;
+  font-size: 27px;
+  letter-spacing: -.04em;
+}
+
+.dialog > p:not(.eyebrow) {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.dialog-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+@media (hover: hover) {
+  .btn-primary:hover,
+  .btn-next:hover {
+    background: #292923;
+  }
+
+  .btn-next.is-finish:hover {
+    background: var(--accent-pressed);
+  }
+}
+
+@media (max-width: 360px) {
   #game-container {
-    border-radius: 24px;
-    margin: 0 8px;
+    padding: 18px;
+    box-shadow: 4px 4px 0 var(--line);
   }
-  .keyboard-hint {
-    display: none;
+
+  .screen {
+    min-height: calc(100dvh - 64px);
+  }
+
+  .game-title h1 {
+    font-size: 52px;
+  }
+
+  .title-range {
+    right: -32px;
+  }
+
+  .letter-display-container {
+    min-height: 260px;
   }
 }
 
-/* Pengoptimalan mode lanskap HP */
-@media (max-height: 540px) and (orientation: landscape) {
+@media (max-height: 650px), (orientation: landscape) {
   body {
-    align-items: flex-start;
-    padding: 12px;
+    display: block;
     overflow-y: auto;
   }
+
   #game-container {
-    max-width: 100%;
-    padding: 20px;
+    min-height: 0;
+    margin-inline: auto;
   }
+
   .screen {
-    gap: 14px;
+    min-height: 500px;
   }
+
   .letter-display-container {
-    height: 120px;
+    min-height: 230px;
   }
-  #current-letter {
-    font-size: 80px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
   }
 }

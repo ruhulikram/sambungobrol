@@ -1,169 +1,162 @@
-/**
- * game.js — Ngobrol Abjad Game Logic
- * @description Handles game state, animations, swipe gesture, key control, and confetti trigger.
- */
-
 document.addEventListener('DOMContentLoaded', () => {
-
-  // ─── DOM Elements ─────────────────────────────────────────────
-  const startScreen = document.getElementById('start-screen');
-  const gameScreen  = document.getElementById('game-screen');
-  const endScreen   = document.getElementById('end-screen');
-
-  const btnStart    = document.getElementById('btn-start');
-  const btnNext     = document.getElementById('btn-next');
-  const btnRestart  = document.getElementById('btn-restart');
-  const btnHome     = document.getElementById('btn-home');
-
-  const letterEl    = document.getElementById('current-letter');
-  const progressBar = document.getElementById('progress-bar');
-  const progressText = document.getElementById('progress-text');
-  const gameContainer = document.getElementById('game-container');
-
-  // ─── Game Constants / State ──────────────────────────────────
   const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const SCREEN_MOTION_MS = 180;
+  const LETTER_OUT_MS = 120;
+
+  const startScreen = document.getElementById('start-screen');
+  const gameScreen = document.getElementById('game-screen');
+  const endScreen = document.getElementById('end-screen');
+  const screens = [startScreen, gameScreen, endScreen];
+
+  const btnStart = document.getElementById('btn-start');
+  const btnNext = document.getElementById('btn-next');
+  const btnRestart = document.getElementById('btn-restart');
+  const btnHome = document.getElementById('btn-home');
+  const btnCancelExit = document.getElementById('btn-cancel-exit');
+  const btnConfirmExit = document.getElementById('btn-confirm-exit');
+
+  const letterEl = document.getElementById('current-letter');
+  const progressBar = document.getElementById('progress-bar');
+  const progressTrack = document.querySelector('.progress-track');
+  const progressText = document.getElementById('progress-text');
+  const exitDialog = document.getElementById('exit-dialog');
+
   let currentIndex = 0;
+  let isAnimating = false;
+  let touchStartX = 0;
+  let touchStartY = 0;
 
-  // ─── Screen Navigation ────────────────────────────────────────
-  function goTo(incoming, outgoing) {
-    if (outgoing) {
-      outgoing.classList.remove('active');
-      outgoing.style.display = 'none';
-    }
-    incoming.style.display = 'flex';
-    // Small delay to trigger CSS transition correctly
-    setTimeout(() => {
-      incoming.classList.add('active');
-    }, 20);
+  function showScreen(nextScreen) {
+    const currentScreen = screens.find((screen) => screen.classList.contains('active'));
+
+    if (!currentScreen || currentScreen === nextScreen) return;
+
+    currentScreen.classList.remove('active');
+    currentScreen.classList.add('leaving');
+
+    window.setTimeout(() => {
+      currentScreen.classList.remove('leaving');
+      nextScreen.classList.add('active');
+
+      const firstButton = nextScreen.querySelector('button');
+      if (firstButton) firstButton.focus({ preventScroll: true });
+    }, SCREEN_MOTION_MS);
   }
 
-  // ─── Update UI state ──────────────────────────────────────────
-  function updateUI() {
-    // Letter switch animation (fade-out, text change, fade-in)
-    letterEl.classList.add('changing');
+  function setProgress() {
+    const step = currentIndex + 1;
+    const percentage = (step / ALPHABET.length) * 100;
+    const isLastLetter = currentIndex === ALPHABET.length - 1;
 
-    setTimeout(() => {
-      letterEl.textContent = ALPHABET[currentIndex];
-      letterEl.classList.remove('changing');
-    }, 150);
+    progressBar.style.width = `${percentage}%`;
+    progressText.textContent = `Huruf ${step} dari ${ALPHABET.length}`;
+    progressTrack.setAttribute('aria-valuenow', String(step));
 
-    // Progress updates
-    const currentStep = currentIndex + 1;
-    const progressPct = (currentStep / ALPHABET.length) * 100;
-    progressBar.style.width = `${progressPct}%`;
-    progressText.textContent = `${currentStep}/${ALPHABET.length}`;
-
-    // Done button at the last letter (Z)
-    const isLast = currentIndex === ALPHABET.length - 1;
-    if (isLast) {
-      btnNext.innerHTML = `
-        <span>SELESAI ✓</span>
-      `;
-      btnNext.classList.add('btn-finish');
-    } else {
-      btnNext.innerHTML = `
-        <span>SELANJUTNYA</span>
-        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-        </svg>
-      `;
-      btnNext.classList.remove('btn-finish');
-    }
+    btnNext.textContent = isLastLetter
+      ? 'Selesaikan permainan'
+      : 'Huruf berikutnya';
+    btnNext.classList.toggle('is-finish', isLastLetter);
   }
 
-  // ─── Container physical press pop effect ─────────────────────
-  function triggerContainerPop() {
-    gameContainer.style.transform = 'scale(0.975)';
-    setTimeout(() => {
-      gameContainer.style.transform = 'scale(1)';
-    }, 100);
-  }
-
-  // ─── Game Lifecycle ───────────────────────────────────────────
-  function startGame() {
+  function resetGame() {
     currentIndex = 0;
-    letterEl.textContent = ALPHABET[0];
-    progressBar.style.width = `${(1 / ALPHABET.length) * 100}%`;
-    progressText.textContent = `1/${ALPHABET.length}`;
-    btnNext.classList.remove('btn-finish');
-    goTo(gameScreen, startScreen);
+    letterEl.textContent = ALPHABET[currentIndex];
+    letterEl.classList.remove('letter-in', 'letter-out');
+    setProgress();
   }
 
-  // ─── Confetti Generator (Pure CSS fallback) ──────────────────
-  function spawnConfetti() {
-    const container = document.querySelector('.confetti-container');
-    if (!container) return;
-    container.innerHTML = '';
+  function changeLetter() {
+    if (isAnimating) return;
+    isAnimating = true;
+    letterEl.classList.remove('letter-in');
+    letterEl.classList.add('letter-out');
 
-    const colors = ['#6366f1', '#a855f7', '#ec4899', '#f59e0b', '#10b981', '#3b82f6', '#f43f5e'];
+    window.setTimeout(() => {
+      letterEl.textContent = ALPHABET[currentIndex];
+      letterEl.classList.remove('letter-out');
+      letterEl.classList.add('letter-in');
+      setProgress();
+      isAnimating = false;
+    }, LETTER_OUT_MS);
+  }
 
-    for (let i = 0; i < 12; i++) {
-      const piece = document.createElement('div');
-      piece.classList.add('confetti-piece');
-      piece.style.left = `${Math.random() * 90 + 5}%`;
-      piece.style.animationDelay = `${(Math.random() * 0.6).toFixed(2)}s`;
-      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-      
-      const size = Math.floor(Math.random() * 6 + 6);
-      piece.style.width = `${size}px`;
-      piece.style.height = `${size}px`;
-      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-      
-      container.appendChild(piece);
+  function startGame() {
+    resetGame();
+    showScreen(gameScreen);
+  }
+
+  function nextTurn() {
+    if (isAnimating) return;
+
+    if (currentIndex === ALPHABET.length - 1) {
+      showScreen(endScreen);
+      return;
     }
+
+    currentIndex += 1;
+    changeLetter();
   }
 
-  // ─── Event Handlers ───────────────────────────────────────────
+  function openExitDialog() {
+    exitDialog.hidden = false;
+    document.body.style.overflow = 'hidden';
+    btnCancelExit.focus();
+  }
+
+  function closeExitDialog() {
+    exitDialog.hidden = true;
+    document.body.style.overflow = '';
+    btnHome.focus();
+  }
+
+  function confirmExit() {
+    exitDialog.hidden = true;
+    document.body.style.overflow = '';
+    resetGame();
+    showScreen(startScreen);
+  }
+
   btnStart.addEventListener('click', startGame);
+  btnNext.addEventListener('click', nextTurn);
+  btnRestart.addEventListener('click', startGame);
+  btnHome.addEventListener('click', openExitDialog);
+  btnCancelExit.addEventListener('click', closeExitDialog);
+  btnConfirmExit.addEventListener('click', confirmExit);
 
-  btnHome.addEventListener('click', () => {
-    goTo(startScreen, gameScreen);
+  exitDialog.addEventListener('click', (event) => {
+    if (event.target === exitDialog) closeExitDialog();
   });
 
-  btnNext.addEventListener('click', () => {
-    triggerContainerPop();
-
-    if (currentIndex < ALPHABET.length - 1) {
-      currentIndex++;
-      updateUI();
-    } else {
-      goTo(endScreen, gameScreen);
-      spawnConfetti();
+  document.addEventListener('keydown', (event) => {
+    if (!exitDialog.hidden) {
+      if (event.key === 'Escape') closeExitDialog();
+      return;
     }
-  });
 
-  btnRestart.addEventListener('click', () => {
-    startGame();
-    goTo(gameScreen, endScreen);
-  });
-
-  // ─── Desktop keyboard bindings ────────────────────────────────
-  document.addEventListener('keydown', (e) => {
-    if (gameScreen.classList.contains('active')) {
-      if (e.code === 'Space' || e.code === 'ArrowRight') {
-        e.preventDefault();
-        btnNext.click();
-      }
-      if (e.code === 'Escape') {
-        btnHome.click();
-      }
-    }
-  });
-
-  // ─── Touch horizontal swipe gesture ───────────────────────────
-  let startX = 0;
-  document.addEventListener('touchstart', (e) => {
-    startX = e.touches[0].clientX;
-  }, { passive: true });
-
-  document.addEventListener('touchend', (e) => {
     if (!gameScreen.classList.contains('active')) return;
-    const deltaX = e.changedTouches[0].clientX - startX;
-    
-    // Swipe left to trigger Next
-    if (deltaX < -60) {
-      btnNext.click();
+
+    if (event.code === 'Space' || event.code === 'ArrowRight') {
+      event.preventDefault();
+      nextTurn();
     }
+
+    if (event.key === 'Escape') openExitDialog();
+  });
+
+  gameScreen.addEventListener('touchstart', (event) => {
+    const touch = event.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
   }, { passive: true });
 
+  gameScreen.addEventListener('touchend', (event) => {
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - touchStartX;
+    const deltaY = touch.clientY - touchStartY;
+    const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY) * 1.5;
+
+    if (isHorizontalSwipe && deltaX < -60) nextTurn();
+  }, { passive: true });
+
+  setProgress();
 });

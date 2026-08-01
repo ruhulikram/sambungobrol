@@ -1,138 +1,93 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="Game ngobrol sambung kalimat sesuai abjad A-Z. Seru dimainkan bareng teman!">
-  <meta name="theme-color" content="#6366f1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-  <title>Ngobrol Abjad 🗣️ A–Z</title>
-
-  <!-- Favicon (Bisa kamu ganti dengan file favicon.ico atau png milikmu) -->
-  <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
-
-  <!-- Custom CSS -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Ngobrol Abjad, permainan obrolan bergiliran dari A sampai Z.">
+  <meta name="theme-color" content="#f2eddf">
+  <title>Ngobrol Abjad — A–Z</title>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
-
 <body>
+  <main id="game-container" aria-label="Permainan Ngobrol Abjad">
+    <section id="start-screen" class="screen active" aria-labelledby="start-title">
+      <!-- AREA LOGO: masukkan elemen buatanmu di sini, lalu hapus teks penandanya. -->
+      <div class="custom-logo-slot" aria-label="Area logo buatan sendiri">
+        <span>AREA LOGO</span>
+      </div>
 
-  <!-- Dekorasi latar belakang (bisa dinonaktifkan/dihapus di style.css) -->
-  <div class="bubble" aria-hidden="true"></div>
-  <div class="bubble" aria-hidden="true"></div>
-  <div class="bubble" aria-hidden="true"></div>
-  <div class="bubble" aria-hidden="true"></div>
-  <div class="bubble" aria-hidden="true"></div>
-
-  <!-- Main Game Container -->
-  <div id="game-container" role="main" aria-label="Game Ngobrol Abjad">
-
-    <!-- ======================== SCREEN 1: START ======================== -->
-    <div id="start-screen" class="screen active" aria-label="Layar Mulai">
-      
-      <!-- Logo Proyek (Ganti file assets/images/logo.svg untuk kustomisasi logo) -->
-      <div class="logo-wrapper">
-        <div class="logo-bg">
-          <img src="assets/images/logo.svg" alt="Logo Ngobrol Abjad" class="logo-img">
+      <div class="start-copy">
+        <p class="eyebrow">CHALLENGE NGOBROL</p>
+        <div class="game-title">
+          <h1 id="start-title">Sambung<br>Obrol</h1>
         </div>
-        <div class="logo-badge">⚡</div>
+        <p class="game-desc">
+          Ngobrolin apa aja, tapi kata depanya sesuai urutan abjad.
+        </p>
       </div>
-
-      <!-- Game Title -->
-      <div class="game-title">
-        <h1>Ngobrol</h1>
-        <span class="highlight">A – Z</span>
-      </div>
-
-      <!-- Description -->
-      <p class="game-desc">
-        Game ngobrol sambung kalimat! Tiap giliran harus ngomong pake kata yang berawalan huruf abjad berikutnya.
-      </p>
-
-      <!-- Fitur/Langkah permainan -->
-      <div class="features-list">
-        <div class="feature-item"><span>💬</span> Ngobrol seru</div>
-        <div class="feature-item"><span>🔤</span> Sesuai abjad</div>
-        <div class="feature-item"><span>🏆</span> Sampai huruf Z</div>
-      </div>
-
-      <!-- Start Button -->
-      <button id="btn-start" class="btn btn-primary">
-        <span>Mulai Main! 🚀</span>
-      </button>
-
-    </div>
-
-    <!-- ======================== SCREEN 2: GAMEPLAY ======================== -->
-    <div id="game-screen" class="screen" aria-label="Layar Gameplay">
       
-      <!-- Top Header (Home & Progress) -->
-      <div class="game-header">
-        <!-- Tombol Home (Ganti assets/images/home.svg untuk kustomisasi ikon) -->
-        <button id="btn-home" class="btn-home" title="Kembali ke Menu Utama" aria-label="Menu Utama">
-          <img src="assets/images/home.svg" alt="Home" class="icon-img">
+      <button id="btn-start" class="btn btn-primary" type="button">
+        Mulai permainan
+      </button>
+    </section>
+
+    <section id="game-screen" class="screen" aria-label="Permainan">
+      <header class="game-header">
+        <button id="btn-home" class="btn-navbar" type="button" aria-label="Keluar dari permainan">
+          <!-- Ganti tanda ini dengan ikon navbar buatanmu. -->
+          <span class="custom-navbar-mark" aria-hidden="true">×</span>
+          <span class="navbar-label">Keluar</span>
         </button>
-        <div class="progress-wrap">
-          <div class="progress-track" role="progressbar" aria-valuemin="1" aria-valuemax="26" aria-valuenow="1">
-            <div id="progress-bar"></div>
-          </div>
-        </div>
-        <span id="progress-text" class="progress-text">1/26</span>
+        <p id="progress-text" class="progress-text">Huruf 1 dari 26</p>
+      </header>
+
+      <div class="progress-track" role="progressbar" aria-valuemin="1" aria-valuemax="26" aria-valuenow="1">
+        <div id="progress-bar"></div>
       </div>
 
-      <!-- Target Letter Display -->
-      <div class="letter-display-container">
-        <div class="glow-ring"></div>
-        <div class="letter-box">
-          <span id="current-letter">A</span>
-        </div>
+      <div class="letter-display-container" aria-live="polite">
+        <span id="current-letter">A</span>
       </div>
 
-      <!-- Prompt Banner -->
-      <div class="prompt-banner">
-        <span>👉</span> Siapa giliran huruf ini?
-      </div>
+      <p class="turn-prompt">Mulai kalimatmu dengan huruf ini.</p>
 
-      <!-- Action Button -->
-      <button id="btn-next" class="btn btn-next">
-        <span>SELANJUTNYA</span>
-        <!-- Panah inline SVG sederhana -->
-        <svg class="btn-icon" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-        </svg>
+      <button id="btn-next" class="btn btn-next" type="button">
+        Huruf berikutnya
       </button>
+    </section>
 
-      <!-- Keyboard Info -->
-      <div class="keyboard-hint">
-        Tekan <kbd>Space</kbd> atau <kbd>→</kbd> untuk lanjut
+    <section id="end-screen" class="screen" aria-labelledby="end-title">
+      <!-- AREA END MARK: masukkan elemen buatanmu di sini, lalu hapus teks penandanya. -->
+      <div class="custom-end-slot" aria-label="Area end mark buatan sendiri">
+        <span>AREA END MARK</span>
       </div>
-
-    </div>
-
-    <!-- ======================== SCREEN 3: FINISH ======================== -->
-    <div id="end-screen" class="screen" aria-label="Layar Selesai">
-      
-      <!-- CSS Confetti container -->
-      <div class="confetti-container" aria-hidden="true"></div>
-
-      <div class="end-emoji">🎉</div>
-      <h2 class="end-title">SELESAI!</h2>
-      <p class="end-desc">
-        Mantap! Kalian berhasil menyelesaikan tantangan ngobrol berurutan dari <strong>A</strong> sampai <strong>Z</strong>!
-      </p>
-
-      <button id="btn-restart" class="btn btn-primary">
-        <span>Main Lagi 🔄</span>
+      <div class="end-copy">
+        <p class="eyebrow">PERMAINAN SELESAI</p>
+        <h2 id="end-title">26 huruf<br>selesai.</h2>
+        <p>Kalian berhasil membawa obrolan dari A sampai Z.</p>
+      </div>
+      <button id="btn-restart" class="btn btn-primary" type="button">
+        Main lagi
       </button>
+    </section>
+  </main>
 
-    </div>
-
+  <div id="exit-dialog" class="dialog-backdrop" hidden>
+    <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
+      <p class="eyebrow">PERMAINAN MASIH BERJALAN</p>
+      <h2 id="dialog-title">Keluar dari permainan?</h2>
+      <p>Progres huruf saat ini akan diulang dari A.</p>
+      <div class="dialog-actions">
+        <button id="btn-cancel-exit" class="btn btn-secondary" type="button">
+          Lanjut bermain
+        </button>
+        <button id="btn-confirm-exit" class="btn btn-danger" type="button">
+          Keluar
+        </button>
+      </div>
+    </section>
   </div>
 
   <script src="assets/js/game.js"></script>
 </body>
-
 </html>
