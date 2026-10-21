@@ -116,15 +116,25 @@ button:focus-visible {
   gap: var(--screen-gap);
 }
 
-/* Slot kosong untuk logo buatanmu. */
+/* Slot logo buatan sendiri. */
 .custom-logo-slot {
   display: grid;
   width: var(--logo-slot-width);
   height: var(--logo-slot-height);
   place-items: center;
-  border: 2px dashed var(--muted);
+}
+
+.custom-logo-slot .custom-logo-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.custom-logo-slot:has(> span) {
+  border: 2px solid var(--line);
   border-radius: 10px;
-  color: var(--muted);
+  background: var(--surface);
+  box-shadow: 3px 3px 0 var(--line);
 }
 
 .custom-logo-slot > span,
@@ -281,11 +291,29 @@ button:focus-visible {
   width: var(--navbar-mark-size);
   height: var(--navbar-mark-size);
   place-items: center;
-  border: 2px dashed var(--muted);
+  background: var(--surface);
+  border: 2px solid var(--line);
   border-radius: 9px;
-  color: var(--muted);
-  font-size: 20px;
-  line-height: 1;
+  box-shadow: 2px 2px 0 var(--line);
+  color: var(--ink);
+  transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+}
+
+.btn-navbar:hover .custom-navbar-mark {
+  background: var(--paper);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--line);
+}
+
+.btn-navbar:active .custom-navbar-mark {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--line);
+}
+
+.navbar-icon-svg {
+  width: 20px;
+  height: 20px;
+  display: block;
 }
 
 .progress-text {
@@ -361,17 +389,35 @@ button:focus-visible {
   gap: 28px;
 }
 
-/* Slot kosong untuk end mark buatanmu. */
+/* Slot end mark buatan sendiri. */
 .custom-end-slot {
   display: grid;
   width: 100%;
   min-height: var(--end-slot-height);
   place-items: center;
   overflow: hidden;
-  background: transparent;
-  border: 2px dashed var(--muted);
+  background: var(--surface);
+  border: 2px solid var(--line);
   border-radius: 18px;
-  color: var(--muted);
+  box-shadow: 4px 4px 0 var(--line);
+  padding: 12px;
+}
+
+.custom-end-slot .custom-end-svg {
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+  display: block;
+  animation: end-trophy-float 3s ease-in-out infinite;
+}
+
+@keyframes end-trophy-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
 .end-copy {
