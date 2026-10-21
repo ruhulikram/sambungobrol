@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Shadow Bubble A -->
+  <rect x="5" y="7" width="34" height="28" rx="8" fill="#171713"/>
+  <path d="M12 35 L8 42 L18 35 Z" fill="#171713"/>
+  <!-- Bubble A -->
+  <rect x="3" y="5" width="34" height="28" rx="8" fill="#ff5c35" stroke="#171713" stroke-width="2.5"/>
+  <path d="M10 33 L6 40 L16 33 Z" fill="#ff5c35" stroke="#171713" stroke-width="2.5" stroke-linejoin="round"/>
+  <text x="20" y="25" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="18" fill="#fffaf0" text-anchor="middle">A</text>
+  
+  <!-- Shadow Bubble Z -->
+  <rect x="27" y="27" width="34" height="28" rx="8" fill="#171713"/>
+  <path d="M52 55 L56 62 L46 55 Z" fill="#171713"/>
+  <!-- Bubble Z -->
+  <rect x="25" y="25" width="34" height="28" rx="8" fill="#fffaf0" stroke="#171713" stroke-width="2.5"/>
+  <path d="M50 53 L54 60 L44 53 Z" fill="#fffaf0" stroke="#171713" stroke-width="2.5" stroke-linejoin="round"/>
+  <text x="42" y="45" font-family="Arial, Helvetica, sans-serif" font-weight="900" font-size="18" fill="#171713" text-anchor="middle">Z</text>
+</svg>
